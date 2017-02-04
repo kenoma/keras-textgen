@@ -1,0 +1,14 @@
+DOOM вновь взобралась на вершину британского чарта.
+Компания GFK Chart-Track, занимающаяся мониторингом рынка медиапродукции в Великобритании, опубликовала данные о продажах видеоигр за минувшую неделю. Согласно представленной информации, шутер DOOM (2016) вернул себе лидерство в местном рейтинге. Его продажи возросли на 57 %.
+На второе место опустилась Overwatch. Приключенческий экшен Uncharted 4: A Thief's End, футбольный симулятор FIFA 16 и криминальный боевик Grand Theft Auto V, напротив, поднялись на одну строчку вверх и теперь занимают третье, четвёртое и пятое места соответственно. Продажи паркур-экшена Mirror's Edge Catalyst рухнули на 62 %, что вынудило его сместиться на шестую позицию. С двенадцатой строчки сразу на седьмую взобрался шутер Call of Duty: Black Ops 3. Десятку лидеров замыкают UEFA Euro 2016 Pro Evolution Soccer, Star Wars Battlefront и LEGO Marvel's Avengers.
+Топ-10 самых популярных игр в Великобритании за период с 11 по 18 июня выглядит следующим образом:
+DOOM;
+Overwatch;
+Uncharted 4: A Thief's End;
+FIFA 16;
+Grand Theft Auto V;
+Mirror's Edge Catalyst;
+Call of Duty: Black Ops 3;
+UEFA Euro 2016 Pro Evolution Soccer;
+Star Wars Battlefront;
+LEGO Marvel's Avengers.
