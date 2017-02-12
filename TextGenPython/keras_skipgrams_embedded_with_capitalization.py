@@ -41,8 +41,8 @@ for sentence in sentences:
 vocabular = sorted(list(set([a[0] for a in words])))
 word_to_indices = dict((c, i) for i, c in enumerate(vocabular))
 indices_to_word = dict((i, c) for i, c in enumerate(vocabular))
-np.save('words_to_indices.npy', word_to_indices)
-np.save('indices_to_words.npy', indices_to_word)
+np.save('cap_words_to_indices.npy', word_to_indices)
+np.save('cap_indices_to_words.npy', indices_to_word)
 
 print("Parsing sentences from training set")
 print("Sentences got:", len(sentences))

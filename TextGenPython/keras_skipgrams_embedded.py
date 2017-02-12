@@ -53,10 +53,10 @@ with open("vocabular.txt", "w", encoding="utf-8") as log:
         log.write(voc)
         log.write('\r')
 
-context = 20
+context = 30
 BATCH_SIZE = 512
 dropout = 0.1
-num_features = 800
+num_features = 600
 hidden_variables = num_features
 
 def generate_batch_data(data, batch_size):
@@ -86,7 +86,7 @@ model.add(LSTM(hidden_variables, return_sequences=False))
 model.add(Dropout(dropout))
 model.add(Dense(vocab_size))
 model.add(Activation('softmax'))
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
 plt.ion()
 plt.show()

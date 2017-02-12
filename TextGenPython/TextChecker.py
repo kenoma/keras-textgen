@@ -51,16 +51,24 @@ class TextChecker():
         return max(candidates, key=self.NWORDS.get)
 
     def spellcheck_sentence(self, sentence):
-        tokens = nltk.word_tokenize(sentence)
+        sentence =  sentence.replace('( ',' (')\
+                            .replace('/ ','/')\
+                            .replace('- ',' - ')\
+                            .replace('000newline',' ')\
+                            .replace(' 000anchor ','')
+
+        return sentence
+        #tokens = nltk.word_tokenize(sentence)
         #pos_tags = nltk.pos_tag(tokens)
         #print(nltk.ne_chunk(pos_tags, binary=True))
-        tokens = [self.correct(word) for word in tokens]
+        #tokens = [self.correct(word) for word in tokens]
         
-        return ''.join([' ' + i if not i.startswith("'") and i not in string.punctuation else i for i in tokens]).strip()
+        #return ''.join([' ' + i if not i.startswith("'") and i not in string.punctuation else i for i in tokens]).strip()
 
     def correct_text(self, text):
         sentences = self.sent_tokenizer.tokenize(text)
         sentences = [self.spellcheck_sentence(sent).capitalize() for sent in sentences]
+        
         return ' '.join(sentences)
 
     
