@@ -32,6 +32,16 @@ class TestFuncs(unittest.TestCase):
         self.assertEqual(res[10][1], 0)
         self.assertEqual(res[10][2], 3)
 
+    def test_ngrams_capitalization(self):
+        proc = RussianTextPreprocessing()
+        res = proc.sentence_to_tokens(u'Вовка внес залог за Windows 10')
+        self.assertEqual(len(res), 20)
+        self.assertEqual(res[1][3], 1)
+        self.assertEqual(res[2][3], 0)
+        self.assertEqual(res[13][3], 0)
+        self.assertEqual(res[14][3], 1)
+        self.assertEqual(res[15][3], 0)
+
     def test_ngrams_6(self):
         proc = RussianTextPreprocessing()
         res = proc.sentence_to_tokens(u'вовка не смогуща')
@@ -44,25 +54,26 @@ class TestFuncs(unittest.TestCase):
         proc = RussianTextPreprocessing()
         res = proc.sentence_to_tokens(u'вовка, остынь!')
         self.assertEqual(len(res), 10)
-        self.assertEqual(res[4][0], 'CS')
-        self.assertEqual(res[9][0], 'EM')
+        self.assertEqual(res[4][0], ',')
+        self.assertEqual(res[9][0], '!')
         self.assertEqual(res[9][1], 0)
         self.assertEqual(res[9][2], 2)
 
     def test_ngrams_8(self):
         proc = RussianTextPreprocessing()
-        res = proc.review_to_sentences(u'вовка, остынь!')
-        self.assertEqual(len(res[0]), 10)
-        self.assertEqual(res[0][4][0], 'CS')
-        self.assertEqual(res[0][9][0], 'EM')
-        self.assertEqual(res[0][9][1], 0)
-        self.assertEqual(res[0][9][2], 2)
+        water,senlen = proc.count_stats(u'вовка _и детерминизм морали.',100,100)
+        self.assertEqual(water, 1)
+        self.assertEqual(senlen, 3)
 
-    def test_ngrams_9(self):
-        proc = RussianTextPreprocessing()
-        water,senlen = proc.count_stats(u'вовка _и детерминизм морали SE',100,100)
-        self.assertEqual(water, 0)
-        self.assertEqual(senlen, 0)
+    #def test_review_to_sentences_9(self):
+    #    proc = RussianTextPreprocessing()
+    #    res = proc.review_to_sentences('И она заявила # первое\r\nи второе')
+    #    self.assertEqual(len(res), 10)
+    #    self.assertEqual(res[4][0], ',')
+    #    self.assertEqual(res[9][0], '!')
+    #    self.assertEqual(res[9][1], 0)
+    #    self.assertEqual(res[9][2], 2)
+
 
     def test_ngrams_10(self):
         proc = RussianTextPreprocessing()

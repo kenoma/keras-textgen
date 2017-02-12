@@ -1,4 +1,0 @@
-Выпущен WHQL-драйвер GeForce 375.70 к релизу Titanfall 2 и TES V: Skyrim Special Edition.
-На PC состоялся выход научно-фантастического шутера Titanfall 2 и ролевой игры The Elder Scrolls V: Skyrim Special Edition. В связи с этим NVIDIA выпустила очередное обновление драйверов, сертифицированное лабораторией Microsoft WHQL.
-В компании отметили, что драйверы GeForce 375.70 WHQL призваны обеспечить наилучшие впечатления не только от данной игры, но также от ролевого стелс-экшена Dishonored 2, шутеров Call of Duty: Infinite Warfare и Call of Duty: Modern Warfare Remastered и VR-версии приключенческой игры Obduction. Также драйвер добавляет SLI-профиль для Tom Clancy's Ghost Recon: Wildlands, устраняет утечку памяти в аркадном автосимуляторе Forza Horizon 3 и различные ошибки при работе на операционной системе Windows 10.
-Скачать драйвер можно как с официального сайта NVIDIA, так и с помощью приложения GeForce Experience.

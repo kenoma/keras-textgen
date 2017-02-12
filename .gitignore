@@ -241,3 +241,8 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+*.txt
+*.hdf5
+/TextGenPython/*.txt
+/software/*.txt
+

@@ -1,5 +1,0 @@
-NVIDIA выпустила драйвер GeForce 375.57 WHQL к релизу Battlefield 1 и Civilization VI.
-У NVIDIA есть программа Game Ready, в рамках которой производитель графических ускорителей выпускает специальные драйверы для видеокарт GeForce, оптимизированные к выходу значимых игр. Так, по случаю релиза PC-версий Battlefield 1 и Sid Meier's Civilization VI компания подготовила специальный драйвер GeForce 375.57 с WHQL-сертификацией.
-NVIDIA настоятельно рекомендует GeForce 375.57 WHQL всем, кто желает получить наилучшие впечатления от данных проектов, а также от VR-игры Eagle Flight, шутеров Serious Sam VR: The Last Hope и Titanfall 2. Драйвер добавил SLI-профиль для MMORPG Lineage Eternal: Twilight Resistance. Также он устраняет иногда появляющееся мерцание в паркур-экшене Mirror's Edge Catalyst и устраняет вылеты из игры при повышении частоты обновления с 144 ГГц до 240 ГГц на мониторах BenQ ZOWIE.
-Помимо этого, при установке GeForce 375.57 WHQL будет обновлено программное обеспечение HD Audio Driver и GeForce Experience.
-Скачать драйвер можно как с официального сайта NVIDIA, так и с помощью приложения GeForce Experience.

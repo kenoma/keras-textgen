@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>99fbf9eb-9e3d-4726-b57f-5a89d9bbf255</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>keras_skipgrams_embedded.py</StartupFile>
+    <StartupFile>keras_skipgrams_embedded_with_capitalization.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -36,6 +36,7 @@
     <Compile Include="Generative.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="keras_skipgrams_embedded_with_capitalization.py" />
     <Compile Include="keras_skipgrams_embedded.py" />
     <Compile Include="keras_skipgrams_with_stats.py" />
     <Compile Include="keras_skipgrams.py" />

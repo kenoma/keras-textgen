@@ -11,6 +11,7 @@ import sys
 from RussianTextPreprocessing import RussianTextPreprocessing
 from TextChecker import TextChecker
 from spellcheck_preparation import spellcheck_preparation
+import codecs
 
 def sample(preds, temperature=1.0):
     preds = np.asarray(preds).astype('float64')
@@ -29,70 +30,68 @@ indices_to_word = np.load('indices_to_words.npy').item()
 
 vocab_size = len(word_to_indices)
 print('Vocabular size:', vocab_size)
-context = 25
-dropout = 0.2
-num_features = 1000
-hidden_variables = int(round(num_features + dropout / 4.0 * num_features)) + 1
+context = 30
+BATCH_SIZE = 1
+dropout = 0.0
+num_features = 1200
+hidden_variables = num_features
 
 print('Build model...')
 model = Sequential()
 model.add(Embedding(input_dim=vocab_size, output_dim=hidden_variables, input_length=context))
-model.add(LSTM(hidden_variables, return_sequences=True))
+model.add(LSTM(hidden_variables, return_sequences=True))# input_shape=(context, vocab_size),
 model.add(Dropout(dropout))
-model.add(GRU(hidden_variables, return_sequences=False))
+model.add(LSTM(hidden_variables, return_sequences=False))
 model.add(Dropout(dropout))
 model.add(Dense(vocab_size))
 model.add(Activation('softmax'))
 
-model.load_weights(u"D:\\projects\\TextGenPython\\TextGenPython\\model_48-1.8696.hdf5")
+model.load_weights(u"D:\\projects\\TextGenPython\\TextGenPython\\epoch_5_model.hdf5")
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
+with codecs.open("programs.txt", "r",encoding='utf-8', errors='strict') as f:
+    content = f.readlines()
+content = [x.strip() for x in content] 
 
-inp = input("Please enter kwds: ")
-sentence = [(a[0] if a[0] in word_to_indices else ' ') for a in proc.sentence_to_tokens(inp, 2)]
-sentence = [' '] * (context - len(sentence)) + sentence[-context:]
-print()
-diversity = 0.7
-print("Divercity: ", diversity)
-generated = ''.join(sentence)
-print()
-start_time = time.time()
-i = 0
-proceed = True
-while proceed:
-    tx = np.zeros((1, context), dtype=np.int)
+for inp in content:
+    #inp = input("Please enter kwds: ")
+    sentence = [(a[0] if a[0] in word_to_indices else ' ') for a in proc.sentence_to_tokens(inp, 2)]
+    sentence = [' '] * (context - len(sentence)) + sentence[-context:]
+    #print(inp)
+    diversity = 0.7
+    print("Divercity: ", diversity)
+    generated = ''.join(sentence)
+    print()
+    start_time = time.time()
+    i = 0
+    proceed = True
+    while proceed:
+        tx = np.zeros((1, context), dtype=np.int)
 
-    for t, word in enumerate(sentence):
-        tx[0, t] = word_to_indices[word]         
+        for t, word in enumerate(sentence):
+            tx[0, t] = word_to_indices[word]         
                 
-    preds = model.predict(tx, verbose=0)[0]
-    new_token = indices_to_word[sample(preds,diversity)]
-    sentence.append(new_token)
-    del sentence[0]
-    generated += new_token
-    i+=1
-    if i > 500 and new_token == 'SE':
-        proceed = False
+        preds = model.predict(tx, verbose=0)[0]
+        new_token = indices_to_word[sample(preds,diversity)]
+        sentence.append(new_token)
+        del sentence[0]
+        generated += new_token
+        sys.stdout.write(new_token)
+        i+=1
+        if i > 1500 and new_token == '.' :
+            proceed = False
 
 
-elapsed_time = time.time() - start_time
+    elapsed_time = time.time() - start_time
 
-generated = generated.replace('_',u'')\
-                    .replace('TD','...')\
-                    .replace('EM','!')\
-                    .replace('SE','.')\
-                    .replace('CS',',')\
-                    .replace('LS',':')\
-                    .replace('DS',';')\
-                    .replace('QM','?')
 
-generated = generated + '\r\n' + txt_checker.correct_text(generated)
+    generated = generated.replace('_',u'').replace('000newline','\r').replace(' 000anchor ','`')
+    generated = txt_checker.correct_text(generated).strip()
 
-with open("output.txt", "a", encoding="utf-8") as log:
-    log.write("Started: %s (elapsed %.2f sec) " % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),elapsed_time))
-    log.write(u'Generation, divercity %f:\t' % diversity)
-    log.write(generated)
-    log.write('\r')
-    log.write('\r')
+    with open("output.txt", "a", encoding="utf-8") as log:
+        log.write(generated)
+        log.write('\r')
+        log.write('\r')
+        log.write('\r')
 
-print(generated)
+    print(generated)

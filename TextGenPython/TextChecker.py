@@ -52,6 +52,8 @@ class TextChecker():
 
     def spellcheck_sentence(self, sentence):
         tokens = nltk.word_tokenize(sentence)
+        #pos_tags = nltk.pos_tag(tokens)
+        #print(nltk.ne_chunk(pos_tags, binary=True))
         tokens = [self.correct(word) for word in tokens]
         
         return ''.join([' ' + i if not i.startswith("'") and i not in string.punctuation else i for i in tokens]).strip()

@@ -2,8 +2,8 @@
 
 import glob
 import codecs
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Dropout,Embedding, Merge, LSTM, GRU
+from keras.models import Sequential, Model
+from keras.layers import Input, Dense, Activation, Dropout,Embedding, Merge, LSTM, GRU
 from keras.optimizers import RMSprop
 from keras.callbacks import ModelCheckpoint, Callback
 from keras.utils.data_utils import get_file
@@ -28,7 +28,8 @@ sentences = []
 
 for filename in glob.glob("D:\projects\TextGenPython\software\*.txt"):
     print(filename)
-    #with codecs.open(filename, "r",encoding='utf-8', errors='strict') as fdata:
+    #with codecs.open(filename, "r",encoding='utf-8', errors='strict') as
+    #fdata:
     with codecs.open(filename, "r",encoding='utf-8', errors='strict') as fdata:
         odata = fdata.read()
         sentences += proc.review_to_sentences(odata, 2)
@@ -56,7 +57,7 @@ with open("vocabular.txt", "w", encoding="utf-8") as log:
 context = 20
 BATCH_SIZE = 512
 dropout = 0.1
-num_features = 800
+num_features = 600
 hidden_variables = num_features
 
 def generate_batch_data(data, batch_size):
@@ -68,25 +69,29 @@ def generate_batch_data(data, batch_size):
         while p < len(data) - context - batch_size:
             textual_x = np.zeros((batch_size, context), dtype=np.int)
             y = np.zeros((batch_size, vocab_size), dtype=np.int)
+            cap = np.zeros((batch_size, 2), dtype=np.int)
             for batch_i in range(batch_size):
                 for i in range(context):
                     textual_x[batch_i, i] = word_to_indices[data[p + i][0]]
                     
                 y[batch_i, word_to_indices[data[p + context][0]]] = 1
+                cap[batch_i, 1 if data[p + context][3] == 1 else 0] = 1
                 p += 1
 
-            yield (textual_x, y)
+            yield (textual_x, [y,cap])
 
 print('Build model...')
-model = Sequential()
-model.add(Embedding(input_dim=vocab_size, output_dim=hidden_variables, input_length=context))
-model.add(LSTM(hidden_variables, return_sequences=True))# input_shape=(context, vocab_size),
-model.add(Dropout(dropout))
-model.add(LSTM(hidden_variables, return_sequences=False))
-model.add(Dropout(dropout))
-model.add(Dense(vocab_size))
-model.add(Activation('softmax'))
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+main_input = Input(shape=(context,), dtype='int32', name='main_input')
+x = Embedding(input_dim=vocab_size, output_dim=hidden_variables, input_length=context)(main_input)
+x = LSTM(hidden_variables, return_sequences=True, dropout_W=dropout, dropout_U=dropout)(x)
+x = LSTM(hidden_variables, return_sequences=False, dropout_W=dropout, dropout_U=dropout)(x)
+
+main_output = Dense(vocab_size,activation='softmax', name='m')(x)
+capitalization_output = Dense(2, activation='softmax', name='c')(x)
+
+model = Model(input=[main_input], output=[main_output, capitalization_output])
+model.compile(loss='categorical_crossentropy', optimizer='adam')
 
 plt.ion()
 plt.show()
@@ -103,7 +108,7 @@ class LossHistory(Callback):
         plt.show()
         plt.pause(0.001)
 
-filepath = "model_{epoch:02d}-{loss:.4f}.hdf5"
+filepath = "cap_model_{epoch:02d}-{loss:.4f}.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True, mode='min')
 history = LossHistory()
 callbacks_list = [checkpoint, history]
@@ -117,7 +122,7 @@ for iteration in range(1, 46 * 2):
     print('Iteration', iteration)
     history = model.fit_generator(batch_generator, samples_per_epoch = BATCH_SIZE * 1000, nb_epoch = 10, verbose=1, callbacks=callbacks_list, nb_worker=1)
     print("Finished:", datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-    model.save("epoch_%d_model.hdf5"%iteration)
+    model.save("cap_epoch_%d_model.hdf5" % iteration)
     start_index = random.randint(0, len(words))
     for diversity in [0.2, 0.5, 1.0, 1.2]:
         print("Divercity: ",diversity)
@@ -130,20 +135,12 @@ for iteration in range(1, 46 * 2):
             for t, word in enumerate(sentence):
                 tx[0, t] = word_to_indices[word]         
                 
-            preds = model.predict(tx, verbose=0)[0]
-            new_token = indices_to_word[sample(preds,diversity)]
+            preds = model.predict(tx, verbose=0)
+            
+            new_token = indices_to_word[sample(preds[0][0], diversity)]
             sentence.append(new_token)
             del sentence[0]
-            generated += new_token
-
-        generated = generated.replace('_',u'')\
-                            .replace('TD','...')\
-                            .replace('EM','!')\
-                            .replace('SE','.')\
-                            .replace('CS',',')\
-                            .replace('LS',':')\
-                            .replace('DS',';')\
-                            .replace('QM','?')\
+            generated += new_token if preds[1][0][0]>0.9 else new_token.capitalize()
 
         with open("output.txt", "a", encoding="utf-8") as log:
             log.write("Started: %s" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
