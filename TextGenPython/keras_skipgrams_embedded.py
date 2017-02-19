@@ -28,6 +28,7 @@ sentences = []
 
 for filename in glob.glob("D:\projects\TextGenPython\software\*.txt"):
     print(filename)
+
     #with codecs.open(filename, "r",encoding='utf-8', errors='strict') as fdata:
     with codecs.open(filename, "r",encoding='utf-8', errors='strict') as fdata:
         odata = fdata.read()
@@ -53,10 +54,10 @@ with open("vocabular.txt", "w", encoding="utf-8") as log:
         log.write(voc)
         log.write('\r')
 
-context = 30
+context = 20
 BATCH_SIZE = 512
 dropout = 0.1
-num_features = 600
+num_features = 800
 hidden_variables = num_features
 
 def generate_batch_data(data, batch_size):
@@ -86,7 +87,7 @@ model.add(LSTM(hidden_variables, return_sequences=False))
 model.add(Dropout(dropout))
 model.add(Dense(vocab_size))
 model.add(Activation('softmax'))
-model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 plt.ion()
 plt.show()

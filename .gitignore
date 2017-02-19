@@ -246,3 +246,5 @@ ModelManifest.xml
 /TextGenPython/*.txt
 /software/*.txt
 
+/TextGenPython/accept_25_1000
+/TextGenPython/gen

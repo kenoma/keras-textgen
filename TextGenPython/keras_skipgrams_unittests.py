@@ -50,6 +50,14 @@ class TestFuncs(unittest.TestCase):
         self.assertEqual(res[10][1], 1)
         self.assertEqual(res[10][2], 2)
 
+    def test_ngrams_capitalized(self):
+        proc = RussianTextPreprocessing()
+        res = proc.sentence_to_tokens(u'вовка Не смогуща')
+        self.assertEqual(len(res), 11)
+        self.assertTrue('_' in res[5][0])
+        self.assertEqual(res[10][1], 1)
+        self.assertEqual(res[10][2], 2)
+
     def test_ngrams_7(self):
         proc = RussianTextPreprocessing()
         res = proc.sentence_to_tokens(u'вовка, остынь!')

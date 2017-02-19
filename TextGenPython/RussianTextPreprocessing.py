@@ -1,6 +1,7 @@
 ﻿import re
 import nltk, string
 
+
 class RussianTextPreprocessing():
     def __init__(self):
         self.tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
@@ -8,6 +9,23 @@ class RussianTextPreprocessing():
         self.r = re.compile(r'[^0-9a-zA-Zа-яА-Я\s\!\"\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^_\`\{\|\}\~]+')#.format(re.escape(string.punctuation)
         #self.alphabet = 'abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчщшьъэюяABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧЩШЬЪЭЮЯ'+string.punctuation
         
+    def get_continuous_chunks(self, text):
+         chunked = nltk.ne_chunk(nltk.pos_tag(nltk.word_tokenize(text)))
+         prev = None
+         continuous_chunk = []
+         current_chunk = []
+         for i in chunked:
+                 if type(i) == nltk.Tree:
+                         current_chunk.append(" ".join([token for token, pos in i.leaves()]))
+                 elif current_chunk:
+                         named_entity = " ".join(current_chunk)
+                         if named_entity not in continuous_chunk:
+                                 continuous_chunk.append(named_entity)
+                                 current_chunk = []
+                 else:
+                         continue
+         return continuous_chunk
+
     def ngrams(self, word, n):
         output = []
         tmp = ''
@@ -22,7 +40,7 @@ class RussianTextPreprocessing():
         return output
 
     def sentence_to_tokens(self, sentence, token_lenght=2):
-        rev_words = nltk.word_tokenize(sentence)
+        rev_words = nltk.word_tokenize(sentence.lower())
         water_index = 0
         sent_len = 0
     
@@ -31,13 +49,13 @@ class RussianTextPreprocessing():
             if a in self.stopwords:
                 water_index += 1
                 self.stopwords[a] += 1
-                retval.append([' ', water_index, sent_len, 0])
-                retval.append(['_' + a.lower(), water_index, sent_len, 1 if a[0].isupper() else 0])
+                retval.append([' ', water_index, sent_len])
+                retval.append(['_' + a.lower(), water_index])
             else:
                 if not a in string.punctuation:
                     sent_len += 1
                     retval.append([' ', water_index, sent_len, 0])
-                    retval.extend([[g.lower(), water_index, sent_len, 1 if g[0].isupper() else 0] for g in self.ngrams(a, token_lenght)])
+                    retval.extend([[g, water_index, sent_len] for g in self.ngrams(a, token_lenght)])
                 else:
                     retval.append([a, water_index, sent_len, 0])
 
