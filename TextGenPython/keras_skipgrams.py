@@ -123,7 +123,7 @@ for iteration in range(1, 46 * 2):
             tx = np.zeros((1, context, vocab_size))
 
             for t, word in enumerate(sentence):
-                tx[0, t,word_to_indices[word]] = 1          
+                tx[0, t, word_to_indices[word]] = 1          
                 
             preds = model.predict(tx, verbose=0)[0]
             new_token = indices_to_word[sample(preds,diversity)]

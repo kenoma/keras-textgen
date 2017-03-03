@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>99fbf9eb-9e3d-4726-b57f-5a89d9bbf255</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Enhance_text.py</StartupFile>
+    <StartupFile>v2\keras_char_to_char.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -13,8 +13,10 @@
     <Name>TextGenPython</Name>
     <RootNamespace>TextGenPython</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>{9a7a9026-48c1-4688-9d5d-e5699d47d074}</InterpreterId>
-    <InterpreterVersion>3.5</InterpreterVersion>
+    <InterpreterId>
+    </InterpreterId>
+    <InterpreterVersion>
+    </InterpreterVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,8 +31,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="char-rnn.py" />
+    <Compile Include="v2\gen_char_to_char.py" />
+    <Compile Include="v2\keras_char_to_char.py" />
+    <Compile Include="v2\text_processing.py" />
     <Compile Include="gen_skipgrams_embedded_with_capitalization.py" />
-    <Compile Include="gen_skipgrams_embedded.py" />
+    <Compile Include="v1\gen_skipgrams_embedded.py" />
     <Compile Include="gen.py">
       <SubType>Code</SubType>
     </Compile>
@@ -39,7 +44,7 @@
     </Compile>
     <Compile Include="Enhance_text.py" />
     <Compile Include="keras_skipgrams_embedded_with_capitalization.py" />
-    <Compile Include="keras_skipgrams_embedded.py" />
+    <Compile Include="v1\keras_skipgrams_embedded.py" />
     <Compile Include="keras_skipgrams_with_stats.py" />
     <Compile Include="keras_skipgrams.py" />
     <Compile Include="keras_generate_text_by_chars_generator.py" />
@@ -80,12 +85,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="{9a7a9026-48c1-4688-9d5d-e5699d47d074}\3.5" />
+    <InterpreterReference Include="Global|PythonCore|3.5|x64" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="english.txt" />
     <Content Include="russian.txt" />
     <Content Include="russian_stop_words.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="v2\" />
+    <Folder Include="v1\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
@@ -96,4 +105,5 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
